@@ -21,6 +21,8 @@ import java.util.Date;
 /**
  * Provide methods to resize and rotate an image file.
  */
+
+
 public class ImageResizer {
     private final static String IMAGE_JPEG = "image/jpeg";
     private final static String IMAGE_PNG = "image/png";
@@ -266,7 +268,7 @@ public class ImageResizer {
     /**
      * Create a resized version of the given image.
      */
-    public static File createResizedImage(Context context, Uri imageUri, int newWidth,
+    public static resizedImageClass createResizedImage(Context context, Uri imageUri, int newWidth,
                                             int newHeight, Bitmap.CompressFormat compressFormat,
                                             int quality, int rotation, String outputPath) throws IOException  {
         Bitmap sourceImage = null;
@@ -303,12 +305,20 @@ public class ImageResizer {
             path = new File(outputPath);
         }
 
-        File newFile = ImageResizer.saveImage(rotatedImage, path,
+      float width=0;
+      float height=0;
+      if(rotatedImage!=null){
+        width = rotatedImage.getWidth();
+        height = rotatedImage.getHeight();
+      }
+
+
+      File newFile = ImageResizer.saveImage(rotatedImage, path,
                 Long.toString(new Date().getTime()), compressFormat, quality);
 
         // Clean up remaining image
         rotatedImage.recycle();
 
-        return newFile;
+        return new resizedImageClass(newFile,height,width);
     }
 }
