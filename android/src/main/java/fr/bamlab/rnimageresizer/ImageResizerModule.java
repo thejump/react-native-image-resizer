@@ -17,6 +17,8 @@ import java.io.IOException;
 /**
  * Created by almouro on 19/11/15.
  */
+
+
 class ImageResizerModule extends ReactContextBaseJavaModule {
     private Context context;
 
@@ -51,8 +53,11 @@ class ImageResizerModule extends ReactContextBaseJavaModule {
         Bitmap.CompressFormat compressFormat = Bitmap.CompressFormat.valueOf(compressFormatString);
         Uri imageUri = Uri.parse(imagePath);
 
-        File resizedImage = ImageResizer.createResizedImage(this.context, imageUri, newWidth,
+        resizedImageClass data = ImageResizer.createResizedImage(this.context, imageUri, newWidth,
                 newHeight, compressFormat, quality, rotation, outputPath);
+        File resizedImage=data.resized;
+        float height=data.height;
+        float width=data.width;
 
         // If resizedImagePath is empty and this wasn't caught earlier, throw.
         if (resizedImage.isFile()) {
@@ -61,6 +66,8 @@ class ImageResizerModule extends ReactContextBaseJavaModule {
             response.putString("uri", Uri.fromFile(resizedImage).toString());
             response.putString("name", resizedImage.getName());
             response.putDouble("size", resizedImage.length());
+            response.putDouble("height", height);
+            response.putDouble("width",width);
             // Invoke success
             successCb.invoke(response);
         } else {
